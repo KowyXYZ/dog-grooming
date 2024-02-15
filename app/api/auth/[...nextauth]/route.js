@@ -8,38 +8,37 @@ const handler = NextAuth({
     providers: [
         GoogleProvider({
             clientId: process.env.GOOGLE_ID,
-            clientSecret: process.env.GOOGLE_SECRET,
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET,
         })
     ],
 
     callbacks: {
         async session({session}) {
             const sessionUser = await User.findOne({
-                email: session.user.email
+                email: session.user.email,
             })
-
+    
             session.user.id = sessionUser._id.toString()
-            return session
+            return session;
         },
 
         async signIn({profile}) {
-            
-              
-
                 try {
                     await connectToDB()
 
                     const userExists = await User.findOne({
-                        emaill: profile.email
+                        email: profile.email
                     })
 
                     if(!userExists) {
                         await User.create({
-                            username: profile.name.replace(" ", "").toLocaleLowerCase(),
+                            username: profile.name.replace(" ", "").toLowerCase(),
                             email: profile.email,
                             image: profile.image
                         })
                     }
+
+                    return true
 
                 } catch (error) {
                     console.log(error)

@@ -22,7 +22,7 @@ const Navbar = () => {
     }
 
     setUpProviders()
-    
+
   }, [])
   
 
@@ -34,21 +34,29 @@ const Navbar = () => {
             <Image width={100} height={100} src='/assets/logo.png' alt="logo" className='object-contain invert'/>
             <p className='text-[24px] text-[#FFAE12] font-black uppercase'>BeautyFur</p>
         </Link>
+    
 
         {/* desktop */}
        {session?.user ?  <div className='hidden sm:flex gap-10 text-[18px] font-bold justify-center items-center'>
             <Link href='/'>Home</Link>
             <Link href='/appointments'>Appointments</Link>
-            <Link href='/profile'>Profile</Link>
+            <div className='flex justify-center items-center gap-3 border-2 p-2 rounded-2xl'>
+                <Image src={session?.user?.image} width={50} height={50} className='rounded-3xl' alt='pfp'/>
+                <Link href='/profile'>{session?.user?.name}</Link>
+            </div>
+         
+            <button className=' px-4 py-2 bg-[#fff] text-[#000] rounded-2xl' onClick={() => signOut()}>Log out</button>
+           
         </div> : 
             <>
               {providers && 
                 Object.values(providers).map((provider) => {
+                  
                    return (
-                      <div className='hidden sm:flex gap-10 text-[18px] font-bold justify-center items-center'>
+                      <div key={provider} className='hidden sm:flex gap-10 text-[18px] font-bold justify-center items-center'>
                          <Link href='/'>Home</Link>
-                         <Link href='/appointments'>Appointments</Link>
-                         <button onClick={() => signIn(provider.id)} className=' px-4 py-2 bg-[#fff] text-[#000] rounded-2xl '>Sign In</button>
+                         <button onClick={() => signIn(provider.id)}>Appointments</button>
+                         <button onClick={() => signIn(provider.id)} className=' px-4 py-2 bg-[#fff] text-[#000] rounded-2xl'>Sign In</button>
                            
                       </div>
                    )
